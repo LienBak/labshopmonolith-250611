@@ -43,4 +43,18 @@ public class Order {
         );
         return orderRepository;
     }
+
+    @PrePersist
+    public void checkAvailability(){
+        if(inventoryService().getInventory(Long.valueOf(getProductId())).getStock() < getQty()) throw new RuntimeException("Out of stock");    		
+        inventoryService().decreaseStock(Long.valueOf(getProductId()), new DecreaseStockCommand(getQty()));
+    }
+
+    public static InventoryService inventoryService(){
+        InventoryService inventoryService = MonolithApplication.applicationContext.getBean(
+            InventoryService.class
+        );
+
+        return inventoryService; // 여기에 breakpoint 설정
+    }
 }

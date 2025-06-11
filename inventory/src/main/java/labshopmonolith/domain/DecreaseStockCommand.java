@@ -9,3 +9,5 @@ public class DecreaseStockCommand {
 
     private Integer qty;
 }
+
+
